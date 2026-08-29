@@ -141,6 +141,13 @@ label {
   padding-right: 40px; /* espaço para o ícone */
    margin-top: 0.6rem ;
 }
+.password-requirements {
+  display: block;
+  margin: -7px 0 14px;
+  color: #62685f;
+  font-size: 11px;
+  line-height: 1.45;
+}
 .toggle-password {
   position: absolute;
   right: 12px;

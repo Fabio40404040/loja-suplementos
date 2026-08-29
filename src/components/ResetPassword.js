@@ -1,4 +1,5 @@
 import { resetPassword } from "../services/AuthService.js";
+import { validatePassword } from "../utils/passwordValidation.js";
 
 export function resetPasswordForm() {
 
@@ -34,9 +35,10 @@ export function resetPasswordForm() {
             return;
         }
 
-        if (newPassword.length < 5) {
+        const passwordValidation = validatePassword(newPassword);
+        if (!passwordValidation.valid) {
             message.style.color = "red";
-            message.textContent = "A senha deve ter pelo menos 6 caracteres.";
+            message.textContent = passwordValidation.message;
             return;
         }
 

@@ -1,6 +1,7 @@
 //====================== controla o formulário  =====================
 
 import { registerUser } from "../services/AuthService.js";
+import { validatePassword } from "../utils/passwordValidation.js";
 
 export function register() {
 
@@ -30,9 +31,9 @@ export function register() {
             return;
         }
 
-        // Validação: senha curta
-        if (psw.length < 6) {
-            if (message) message.textContent = "A senha deve ter pelo menos 6 caracteres.";
+        const passwordValidation = validatePassword(psw);
+        if (!passwordValidation.valid) {
+            if (message) message.textContent = passwordValidation.message;
             return;
         }
 

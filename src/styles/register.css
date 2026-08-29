@@ -117,6 +117,14 @@ a:hover {
   padding-right: 40px; /* espaço para o ícone do olho */
 }
 
+.password-requirements {
+  display: block;
+  margin: -10px 0 16px;
+  color: #62685f;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
 .toggle-password {
   position: absolute;
   right: 12px;

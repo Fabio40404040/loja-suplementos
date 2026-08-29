@@ -40,6 +40,16 @@ function formatCurrency(cents) {
     }).format(cents / 100);
 }
 
+function passwordValidationError(password) {
+    const valid = password.length >= 8
+        && /[A-Z]/.test(password)
+        && /[^A-Za-z0-9\s]/.test(password);
+
+    return valid
+        ? null
+        : "A senha deve ter no mínimo 8 caracteres, uma letra maiúscula e um caractere especial.";
+}
+
 function normalizedOrder(order) {
     const createdAt = new Date(order.created_at);
     const items = Array.isArray(order.items) ? order.items : [];
@@ -184,9 +194,8 @@ app.post("/api/register", async (request, response) => {
         return response.status(400).json({ error: "E-mail e senha são obrigatórios." });
     }
 
-    if (password.length < 6) {
-        return response.status(400).json({ error: "A senha deve ter pelo menos 6 caracteres." });
-    }
+    const passwordError = passwordValidationError(password);
+    if (passwordError) return response.status(400).json({ error: passwordError });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -245,9 +254,8 @@ app.post("/api/reset-password", async (request, response) => {
         return response.status(400).json({ error: "Token e nova senha são obrigatórios." });
     }
 
-    if (newPassword.length < 6) {
-        return response.status(400).json({ error: "A senha deve ter pelo menos 6 caracteres." });
-    }
+    const passwordError = passwordValidationError(newPassword);
+    if (passwordError) return response.status(400).json({ error: passwordError });
 
     const resetTokenHash = crypto.createHash("sha256").update(token).digest("hex");
     const [user] = await sql`

@@ -27,6 +27,10 @@
                         type="password"
                         name="newPassword"
                         placeholder="Digite a nova senha"
+                        minlength="8"
+                        pattern="(?=.*[A-Z])(?=.*[^A-Za-z0-9 ]).{8,}"
+                        title="Use no mínimo 8 caracteres, uma letra maiúscula e um caractere especial."
+                        autocomplete="new-password"
                         required>
 
                     <button
@@ -37,6 +41,8 @@
                     </button>
                 </div>
 
+                <small class="password-requirements">Mínimo de 8 caracteres, uma letra maiúscula e um caractere especial.</small>
+
                 <label for="newPasswordRepeat">Repita a nova senha</label>
 
                 <div class="password-wrapper">
@@ -45,6 +51,8 @@
                         type="password"
                         name="newPasswordRepeat"
                         placeholder="Repita a nova senha"
+                        minlength="8"
+                        autocomplete="new-password"
                         required>
 
                     <button
