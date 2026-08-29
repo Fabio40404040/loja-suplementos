@@ -1,0 +1,223 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #b6b0b0;
+  font-family: Arial, sans-serif;
+  min-height: 100vh; 
+}
+h1 {
+  text-align: center;
+}
+.message {
+  color: #eb2416;
+}
+/* Centralizar-Conteudo */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px; 
+}
+/* Formulário*/
+form {
+  border: 3px solid #f1f1f1;
+  width: 100%;
+  max-width: 400px; 
+  height: auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Full-width inputs */
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding: 10px 15px;
+  margin: 6px 0 14px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+button {
+  background-color: #3046a8;
+  color: white;
+  padding: 12px 20px;
+  margin: 10px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+}
+button:hover {
+  opacity: 0.8;
+}
+.cancelbtn {
+  width: auto;
+  padding: 8px 18px;
+  background-color: #eb2416;
+  font-size: 14px;
+}
+
+/* Centralizar  Avatar*/
+.imgcontainer {
+  text-align: center;
+  margin: 16px 0 8px 0;
+}
+
+/* Avatar image */
+img.avatar {
+    vertical-align: middle;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 10rem;
+}
+
+/* containers - REDUZIDO */
+.container {
+  padding: 12px 20px;
+}
+
+/* Container do cancel e forgot password - com fundo */
+.container:last-of-type {
+  background-color: #f1f1f1;
+  border-radius: 0 0 10px 10px;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* The "Forgot password" text */
+span.psw {
+  padding-top: 8px;
+  font-size: 14px;
+}
+
+span.psw a {
+  color: #04AA6D;
+  text-decoration: none;
+}
+
+span.psw a:hover {
+  text-decoration: underline;
+}
+
+/* Labels */
+label {
+  font-weight: bold;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* Checkbox */
+.container label:last-of-type {
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+/* Mostrar Senha*/
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+.password-wrapper input{
+  padding-right: 40px; /* espaço para o ícone */
+   margin-top: 0.6rem ;
+}
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: auto;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  color: #666;
+  font-size: 16px;
+}
+.toggle-password:hover {
+  color: #3046a8;
+}
+
+/* Wrapper genérico para inputs com botão dentro (email, etc.) */
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-wrapper input {
+  padding-right: 40px; /* espaço pro ícone */
+  margin-top: 0.6rem ;
+  
+}
+
+.clear-input {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: auto;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  color: #999;
+  font-size: 15px;
+  display: none; /* só aparece quando o campo tem texto */
+}
+
+.clear-input:hover {
+  color: #eb2416;
+}
+
+.clear-input.visible {
+  display: block;
+}
+
+@media screen and (max-width: 400px) {
+  .login-container {
+    padding: 10px;
+  }
+  
+  form {
+    max-width: 100%;
+  }
+  
+  .container:last-of-type {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .cancelbtn {
+    width: 100%;
+  }
+  
+  span.psw {
+    float: none;
+    display: block;
+    text-align: center;
+  }
+}

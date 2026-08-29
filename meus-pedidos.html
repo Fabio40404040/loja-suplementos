@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Pedidos</title>
+    <link rel="stylesheet" href="./src/styles/conta.css">
+</head>
+<body class="orders-page">
+
+    <div class="conta-container">
+
+        <div class="container pedidos-container">
+
+            <a class="orders-brand" href="./index.html"><span>F</span><strong>FORJA</strong></a>
+
+            <h1>Meus Pedidos</h1>
+            <p>Acompanhe cada etapa das suas compras em tempo real.</p>
+            <hr>
+
+            <p id="pedidosLoading" class="pedidos-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Carregando pedidos...</p>
+
+            <ul id="pedidosList" class="pedidos-list">
+                <!-- Preenchido via JS -->
+            </ul>
+
+            <p id="semPedidos" class="sem-pedidos" style="display:none;">
+                Você ainda não fez nenhum pedido.
+            </p>
+
+            <a href="./index.html" class="voltarbtn">Voltar à loja</a>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+
+</body>
+</html>

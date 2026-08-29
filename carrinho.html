@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Carrinho</title>
+    <link rel="stylesheet" href="./src/styles/cart.css">
+</head>
+<body>
+
+    <div class="cart-page">
+
+        <div class="cart-box">
+
+            <h1>Meu Carrinho</h1>
+            <hr>
+
+            <div id="cartList" class="cart-list"></div>
+
+            <p id="cartEmpty" class="cart-empty" style="display:none;">
+                Seu carrinho está vazio.
+            </p>
+
+            <p id="checkoutMessage" class="checkout-message"></p>
+
+            <div id="cartSummary" class="cart-summary">
+                <div class="cart-total-row">
+                    <span>Total</span>
+                    <span id="cartTotal">R$ 0,00</span>
+                </div>
+                <button id="checkoutBtn" class="checkoutbtn">Finalizar Compra</button>
+            </div>
+            
+            <a href="./index.html" class="voltarbtn">Continuar comprando</a>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+
+</body>
+</html>

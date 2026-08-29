@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conectar-se</title>
+    <link rel="stylesheet" href="./src/styles/login.css">
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <form id="loginForm">
+
+            <div class="imgcontainer">
+                <img src="./src/assets/avatar_3.png" alt="Avatar" class="avatar">
+            </div>
+
+            <div class="container">
+
+                <label for="email">Email</label>
+
+                <div class="input-wrapper">
+                    <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="Digite seu email"
+                    required>
+
+                    <button
+                        type="button"
+                        id="clearEmail"
+                        class="clear-input"
+                        aria-label="Limpar email">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <label for="password">Senha</label>
+
+               <div class="password-wrapper">
+                    <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        placeholder="Digite sua senha"
+                        required>
+
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        class="toggle-password"
+                        aria-label="Mostrar senha">
+                        <i class="fa-solid fa-eye" style="color: rgb(26, 25, 24);"></i>
+                    </button>
+                </div>
+
+                <button type="submit">
+                    Login
+                </button>
+
+                <p id="message" ></p>
+
+                <label class="remember">
+                    <input
+                        type="checkbox"
+                        name="remember"
+                        checked>
+
+                    Lembrar
+                </label>
+
+            </div>
+
+            <div class="container">
+
+                <button
+                    type="button"
+                    id="cancelBtn"
+                    class="cancelbtn">
+
+                    Cancelar
+
+                </button>
+
+                <span class="psw">
+                    Esqueceu sua <a href="./esqueci-senha.html">senha?</a>
+                </span>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+
+</body>
+
+</html>

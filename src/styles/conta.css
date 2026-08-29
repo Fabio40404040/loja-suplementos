@@ -1,0 +1,221 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #b6b0b0;
+}
+
+.conta-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.container h1 {
+  font-size: 22px;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.container p {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #f1f1f1;
+  margin: 16px 0;
+}
+
+/* Linhas de informação (Minha Conta) */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 14px;
+}
+
+.info-row .label {
+  font-weight: bold;
+  color: #333;
+}
+
+.info-row .value {
+  color: #555;
+}
+
+/* Lista de pedidos */
+.pedidos-list {
+  list-style: none;
+}
+
+.pedido-item {
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.pedido-item .pedido-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.pedido-item .status {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #e6f7ee;
+  color: #04AA6D;
+}
+
+/* Acompanhamento de pedidos */
+.orders-page {
+  background: #f1f2eb;
+  color: #10130f;
+}
+
+.orders-page .conta-container {
+  align-items: flex-start;
+  padding: 48px 20px;
+}
+
+.pedidos-container {
+  max-width: 780px;
+  padding: 34px;
+  border: 1px solid #e4e6de;
+  box-shadow: 0 18px 55px rgba(16, 19, 15, 0.09);
+}
+
+.orders-brand {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 9px;
+  margin: 0 auto 24px;
+  color: #10130f;
+  text-decoration: none;
+  letter-spacing: 0.08em;
+}
+
+.orders-brand span {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px 10px 4px 10px;
+  background: #10130f;
+  color: #c8f135;
+  font-weight: 900;
+  transform: skew(-7deg);
+}
+
+.pedidos-loading { padding: 24px; }
+.pedidos-list { display: grid; gap: 16px; }
+
+.pedido-item {
+  margin: 0;
+  padding: 22px;
+  border-color: #dde0d7;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.pedido-item .pedido-header { align-items: center; margin-bottom: 14px; }
+.pedido-header > div { display: grid; gap: 2px; }
+.pedido-header > div small { color: #7b8077; font-size: 9px; text-transform: uppercase; letter-spacing: .12em; }
+.pedido-header > div strong { font-size: 18px; }
+
+.pedido-item .status { padding: 7px 11px; border-radius: 999px; font-size: 10px; }
+.pedido-item .status-0 { background: #fff0d8; color: #a55a00; }
+.pedido-item .status-1 { background: #e5efff; color: #2861a5; }
+.pedido-item .status-2 { background: #e7f7dc; color: #397619; }
+
+.pedido-meta { display: flex; justify-content: space-between; gap: 15px; padding: 12px 0; border-top: 1px solid #eef0e9; border-bottom: 1px solid #eef0e9; color: #70766d; font-size: 11px; }
+.pedido-meta > strong { color: #10130f; font-size: 14px; }
+.pedido-produtos { display: grid; gap: 5px; padding-top: 14px; color: #5c6259; font-size: 11px; }
+
+.order-timeline { display: grid; grid-template-columns: repeat(3, 1fr); margin: 24px 0 16px; padding: 0; list-style: none; }
+.timeline-step { position: relative; display: grid; justify-items: center; gap: 7px; color: #a9aea5; }
+.timeline-step::before { content: ""; position: absolute; top: 11px; right: 50%; width: 100%; height: 2px; background: #dfe2da; }
+.timeline-step:first-child::before { display: none; }
+.timeline-step > span { width: 24px; height: 24px; z-index: 1; display: grid; place-items: center; border: 2px solid #dfe2da; border-radius: 50%; background: white; font-size: 8px; }
+.timeline-step.completed::before, .timeline-step.completed > span { border-color: #9fca17; background-color: #c8f135; color: #10130f; }
+.timeline-step.completed::before { background: #c8f135; }
+.timeline-step.current > span { box-shadow: 0 0 0 5px rgba(200, 241, 53, .24); }
+.timeline-step small { font-size: 9px; font-weight: 700; }
+
+.status-timer { display: block; padding: 10px; border-radius: 7px; background: #f5f6ef; color: #666c63; text-align: center; font-size: 10px; }
+.status-timer strong { color: #10130f; font-size: 12px; }
+.status-timer.delivered { color: #397619; }
+.pedidos-error { padding: 20px; border-radius: 8px; background: #fff0ef; color: #a52b20; text-align: center; list-style: none; }
+.checkout-message a { display: block; margin-top: 8px; color: inherit; font-weight: 700; }
+
+@media (max-width: 540px) {
+  .orders-page .conta-container { padding: 20px 10px; }
+  .pedidos-container { padding: 22px 14px; }
+  .pedido-item { padding: 16px 12px; }
+  .pedido-header { align-items: flex-start !important; }
+  .pedido-meta { flex-direction: column; }
+}
+
+.sem-pedidos {
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+  padding: 20px 0;
+}
+
+/* Botões */
+.voltarbtn,
+.logoutbtn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.voltarbtn {
+  background-color: #f7f7f7;
+  color: #333;
+}
+
+.voltarbtn:hover {
+  background-color: #eee;
+  text-decoration: none;
+}
+
+.logoutbtn {
+  background-color: #eb2416;
+  color: white;
+}
+
+.logoutbtn:hover {
+  opacity: 0.9;
+}

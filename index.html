@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Forja Nutrition: suplementos para uma rotina mais forte, com praticidade e confiança." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Forja Nutrition | Sua evolução começa aqui</title>
+  </head>
+  <body class="home-page" id="home">
+    <div class="announcement"><span><i class="fa-solid fa-bolt"></i> Semana da evolução: até 20% OFF em kits selecionados</span><a href="#produtos">Ver ofertas <i class="fa-solid fa-arrow-right"></i></a></div>
+
+    <header class="site-header">
+      <div class="topheader shell">
+        <nav class="main-nav" aria-label="Navegação principal">
+          <a class="brand" href="#home" aria-label="Forja Nutrition - início"><span class="brand-mark">F</span><span class="brand-copy"><strong>FORJA</strong><small>NUTRITION</small></span></a>
+          <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+          <div class="nav-links" id="navLinks">
+            <a href="#home">Início</a><a class="nav-secondary" href="#categorias">Categorias</a><a href="#produtos">Produtos</a><a href="./rastreio.html">Rastreio</a><a href="./favoritos.html">Favoritos <span id="favoritesBadge" class="favorites-badge" hidden>0</span></a><a class="nav-secondary" href="#sobre">Sobre</a>
+            <div class="search-container"><label class="sr-only" for="search">Buscar produtos</label><i class="fa-solid fa-magnifying-glass"></i><input type="search" id="search" placeholder="O que você procura?" autocomplete="off" /><ul id="search-results" class="search-results"></ul></div>
+            <div class="header-actions">
+              <div class="dropdownSuspenso"><a id="userMenu" href="#" aria-label="Conectar-se ou acessar minha conta"><i class="fa-regular fa-user"></i><span id="userName">Conectar-se</span><i class="fa-solid fa-chevron-down caret"></i></a><div class="dropdown-contentSuspenso" id="userDropdown"><a href="./login.html" id="loginLink">Login</a><a href="./register.html" id="registerLink">Cadastro</a></div></div>
+              <a class="cart-link" href="./carrinho.html" aria-label="Abrir carrinho"><i class="fa-solid fa-bag-shopping"></i><span class="cart-label">Carrinho</span><span id="cartBadge" class="cart-badge" style="display:none;">0</span></a>
+            </div>
+          </div>
+          <div class="nav-overlay" id="navOverlay"></div>
+        </nav>
+      </div>
+      <nav class="category-nav" aria-label="Categorias de produtos"><div class="shell category-nav-inner">
+        <div class="dropdown"><button class="dropbtn" type="button">Todas as categorias <i class="fa-solid fa-chevron-down"></i></button><div class="dropdown-content"><a href="#produtos" data-category="Todos">Todos os produtos</a><a href="#produtos" data-category="Creatina">Creatina</a><a href="#produtos" data-category="Proteínas">Proteínas</a><a href="#produtos" data-category="Pré Treino">Pré-treino</a><a href="#produtos" data-category="Multivitamínico">Vitaminas</a><a href="#produtos" data-category="Aminoácidos">Aminoácidos</a><a href="#produtos" data-category="Hidratação">Hidratação</a><a href="#produtos" data-category="Bem-estar">Bem-estar</a><a href="#produtos" data-category="Kits">Kits</a></div></div>
+        <a href="#produtos" data-category="Creatina">Creatina</a><a href="#produtos" data-category="Proteínas">Proteínas</a><a href="#produtos" data-category="Pré Treino">Pré-treino</a><a href="#produtos" data-category="Multivitamínico">Vitaminas</a><a href="#produtos" data-category="Energia">Energia</a><a href="#produtos" data-category="Kits">Kits & Combos</a>
+      </div></nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title"><div class="shell hero-content"><span class="eyebrow"><i class="fa-solid fa-fire-flame-curved"></i> Performance que acompanha você</span><h1 id="hero-title">Construa sua melhor <em>versão.</em></h1><p>Suplementação descomplicada para quem transforma constância em resultado. Produtos selecionados, entrega rápida e suporte de verdade.</p><div class="hero-actions"><a class="button button-primary" href="#produtos">Explorar produtos <i class="fa-solid fa-arrow-right"></i></a><a class="button button-ghost" href="#sobre"><i class="fa-regular fa-circle-play"></i> Conheça a Forja</a></div><div class="hero-proof"><div class="avatar-stack"><span>FM</span><span>LS</span><span>RA</span><span>+2k</span></div><div><strong>4,9 de 5</strong><span><i class="fa-solid fa-star"></i> por mais de 2 mil clientes</span></div></div></div></section>
+
+      <section class="trust-bar" aria-label="Vantagens da loja"><div class="shell trust-grid"><div><i class="fa-solid fa-truck-fast"></i><span><strong>Envio rápido</strong><small>Para todo o Brasil</small></span></div><div><i class="fa-solid fa-shield-halved"></i><span><strong>Compra protegida</strong><small>Ambiente 100% seguro</small></span></div><div><i class="fa-solid fa-box-open"></i><span><strong>Produtos selecionados</strong><small>Qualidade em cada pedido</small></span></div><div><i class="fa-solid fa-headset"></i><span><strong>Suporte humano</strong><small>A gente treina junto</small></span></div></div></section>
+
+      <section class="category-section shell" id="categorias"><div class="section-heading heading-row"><div><span class="kicker">Encontre seu objetivo</span><h2>Compre por categoria</h2></div><a href="#produtos" data-category="Todos">Ver catálogo completo <i class="fa-solid fa-arrow-right"></i></a></div><div class="category-cards">
+        <a class="category-card category-card--lime" href="#produtos" data-category="Creatina"><span class="category-icon"><i class="fa-solid fa-dumbbell"></i></span><span><strong>Creatina</strong><small>Força e potência</small></span><i class="fa-solid fa-arrow-right"></i></a>
+        <a class="category-card category-card--cream" href="#produtos" data-category="Proteínas"><span class="category-icon"><i class="fa-solid fa-glass-water"></i></span><span><strong>Proteínas</strong><small>Recuperação diária</small></span><i class="fa-solid fa-arrow-right"></i></a>
+        <a class="category-card category-card--coral" href="#produtos" data-category="Pré Treino"><span class="category-icon"><i class="fa-solid fa-bolt"></i></span><span><strong>Pré-treino</strong><small>Foco e energia</small></span><i class="fa-solid fa-arrow-right"></i></a>
+        <a class="category-card category-card--purple" href="#produtos" data-category="Bem-estar"><span class="category-icon"><i class="fa-solid fa-moon"></i></span><span><strong>Bem-estar</strong><small>Equilíbrio e descanso</small></span><i class="fa-solid fa-arrow-right"></i></a>
+      </div></section>
+
+      <section class="products-section shell" id="produtos">
+        <div class="section-heading heading-row">
+          <div>
+            <span class="kicker">Seleção Forja</span>
+            <h2 id="productsTitle">Produtos em destaque</h2>
+          </div><p id="productsCount" aria-live="polite"></p>
+        </div>
+        <div class="filter-chips" aria-label="Filtrar produtos">
+            <button class="filter-chip active" type="button" data-category="Todos">Todos</button>
+            <button class="filter-chip" type="button" data-category="Creatina">Creatina</button>
+            <button class="filter-chip" type="button" data-category="Proteínas">Proteínas</button>
+            <button class="filter-chip" type="button" data-category="Pré Treino">Pré-treino</button>
+            <button class="filter-chip" type="button" data-category="Multivitamínico">Vitaminas</button>
+            <button class="filter-chip" type="button" data-category="Bem-estar">Bem-estar</button>
+            <button class="filter-chip" type="button" data-category="Energia">Energia</button>
+        </div>
+        <div id="productsGrid" class="products-grid"></div>
+        <div 
+          id="emptyProducts" 
+          class="empty-products" 
+          hidden><i class="fa-solid fa-magnifying-glass"></i>
+          <h3>Nenhum produto encontrado</h3>
+          <p>Tente outro termo ou veja todos os produtos.</p>
+          <button type="button" data-category="Todos">Limpar filtros</button>
+        </div>
+      </section>
+
+      <section class="promo-section shell"><div class="promo-copy"><span class="kicker">Combo da semana</span><h2>Treino completo.<br />Desculpas zeradas.</h2><p>Creatina + Whey + Pré-treino com condições especiais para acelerar sua rotina.</p><a class="button button-dark" href="#produtos" data-category="Kits">Quero meu combo <i class="fa-solid fa-arrow-right"></i></a></div><div class="promo-stat"><strong>20%</strong><span>OFF</span><small>em kits selecionados</small></div></section>
+
+      <section class="about-section" id="sobre"><div class="shell about-grid"><div class="about-visual" aria-hidden="true"><span class="outline-word">FORJA</span><div class="about-number">01</div><div class="about-card"><i class="fa-solid fa-medal"></i><strong>Qualidade sem atalhos</strong><span>Curadoria rigorosa em cada produto.</span></div></div><div class="about-copy"><span class="kicker">Sobre a Forja</span><h2>Não vendemos fórmulas mágicas. Entregamos ferramentas.</h2><p>A Forja nasceu para tornar a suplementação mais clara, confiável e próxima de quem treina. Selecionamos produtos pensando em rotina, resultado e transparência.</p><div class="about-points"><div><span>01</span><p><strong>Curadoria inteligente</strong>Menos confusão, escolhas melhores.</p></div><div><span>02</span><p><strong>Informação acessível</strong>Conteúdo direto para sua decisão.</p></div><div><span>03</span><p><strong>Comunidade em movimento</strong>Evolução é melhor quando compartilhada.</p></div></div></div></div></section>
+
+      <section class="testimonials shell"><div class="section-heading"><span class="kicker">Quem treina, recomenda</span><h2>Histórias de quem escolheu evoluir</h2></div><div class="testimonial-grid"><article><div class="stars">★★★★★</div><p>“A navegação é fácil, encontrei tudo rápido e meu pedido chegou antes do previsto. Virou minha loja de confiança.”</p><footer><span>MC</span><div><strong>Marina Costa</strong><small>Cliente verificada</small></div></footer></article><article class="featured"><div class="stars">★★★★★</div><p>“O que mais gostei foi a seleção objetiva. Sem centenas de opções iguais: só produtos que fazem sentido.”</p><footer><span>JP</span><div><strong>João Pedro</strong><small>Cliente verificado</small></div></footer></article><article><div class="stars">★★★★★</div><p>“Atendimento muito próximo e embalagem impecável. A Forja já faz parte da minha rotina de treino.”</p><footer><span>AS</span><div><strong>Ana Souza</strong><small>Cliente verificada</small></div></footer></article></div></section>
+
+      <section class="newsletter"><div class="shell newsletter-inner"><div><span class="kicker">Conteúdo que fortalece</span><h2>Entre para o time da Forja.</h2><p>Receba novidades, ofertas e dicas práticas para sua evolução.</p></div><form id="newsletterForm"><label class="sr-only" for="newsletterEmail">Seu melhor e-mail</label><input id="newsletterEmail" type="email" placeholder="Seu melhor e-mail" required /><button type="submit">Quero receber <i class="fa-solid fa-arrow-right"></i></button><small id="newsletterMessage">Sem spam. Só o que ajuda você a evoluir.</small></form></div></section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#home">
+            <span class="brand-mark">F</span>
+            <span class="brand-copy"><strong>FORJA</strong><small>NUTRITION</small></span> 
+          </a>
+          <p>Performance se constrói todos os dias.</p>
+          <div class="social-links">
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Instagram da Forja Nutrition"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer" aria-label="Abrir TikTok da Forja Nutrition"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="Abrir YouTube da Forja Nutrition"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+        <div>
+          <h3>Loja</h3>
+          <a href="#produtos">Todos os produtos</a>
+          <a href="#categorias">Categorias</a>
+          <a href="#produtos" data-category="Kits">Kits e combos</a>
+          <a href="#produtos">Lançamentos</a>
+        </div>
+        <div>
+          <h3>Ajuda</h3>
+          <a href="./ajuda.html#central">Central de ajuda</a>
+          <a href="./ajuda.html#envios">Envios e entregas</a>
+          <a href="./ajuda.html#trocas">Trocas e devoluções</a>
+          <a href="./meus-pedidos.html">Meus pedidos</a>
+        </div>
+        <div>
+          <h3>Institucional</h3>
+          <a href="#sobre">Sobre a Forja</a>
+          <a href="./termos.html">Termos e privacidade</a>
+          <a href="#">Fale conosco</a>
+          <a href="#">Trabalhe com a gente</a>
+        </div>
+      </div>
+      <div class="shell footer-bottom">
+        <span>© 2026 Forja Nutrition. Projeto demonstrativo.</span>
+        <span>Compra segura <i class="fa-solid fa-lock"></i></span>
+      </div>
+    </footer>
+  
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

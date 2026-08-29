@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esqueci minha senha</title>
+    <link rel="stylesheet" href="./src/styles/login.css">
+</head>
+<body>
+
+    <div class="login-container">
+
+        <form id="forgotForm">
+
+            <div class="container">
+
+                <h1>Esqueci minha senha</h1>
+                <p style="text-align:center; margin: 8px 0 16px;">
+                    Digite seu e-mail e enviaremos um link para redefinir sua senha.
+                </p>
+
+                <label for="email">Email</label>
+
+                <div class="input-wrapper">
+                    <input
+                        id="email"
+                        type="email"
+                        name="email"
+                        placeholder="Digite seu email"
+                        required>
+
+                    <button
+                        type="button"
+                        id="clearEmail"
+                        class="clear-input"
+                        aria-label="Limpar email">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <button type="submit">Enviar link</button>
+
+                <p id="message"></p>
+
+                <p style="text-align:center; font-size: 14px; margin-top: 10px;">
+                    <a href="./login.html">Voltar ao login</a>
+                </p>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redefinir senha</title>
+    <link rel="stylesheet" href="./src/styles/login.css">
+</head>
+<body>
+
+    <div class="login-container">
+
+        <form id="resetForm">
+
+            <div class="container">
+
+                <h1>Redefinir senha</h1>
+                <p style="text-align:center; margin: 8px 0 16px;">
+                    Digite sua nova senha.
+                </p>
+
+                <label for="newPassword">Nova senha</label>
+
+                <div class="password-wrapper">
+                    <input
+                        id="newPassword"
+                        type="password"
+                        name="newPassword"
+                        placeholder="Digite a nova senha"
+                        required>
+
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        aria-label="Mostrar senha">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
+
+                <label for="newPasswordRepeat">Repita a nova senha</label>
+
+                <div class="password-wrapper">
+                    <input
+                        id="newPasswordRepeat"
+                        type="password"
+                        name="newPasswordRepeat"
+                        placeholder="Repita a nova senha"
+                        required>
+
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        aria-label="Mostrar senha">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
+
+                <button type="submit">Redefinir senha</button>
+
+                <p id="message"></p>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+
+</body>
+</html>

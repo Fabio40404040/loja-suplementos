@@ -1,0 +1,120 @@
+[
+  {
+    "id": 1021,
+    "userId": 1,
+    "createdAt": "2026-07-28T12:00:00.000Z",
+    "total": "R$ 189,90",
+    "items": []
+  },
+  {
+    "id": 1035,
+    "userId": 1,
+    "createdAt": "2026-08-02T12:00:00.000Z",
+    "total": "R$ 79,90",
+    "items": []
+  },
+  {
+    "id": 1036,
+    "userId": 3,
+    "createdAt": "2026-08-28T15:20:36.445Z",
+    "total": "R$ 269,70",
+    "items": [
+      {
+        "id": 3,
+        "name": "Ômega 3 60 cápsulas",
+        "price": 49.9,
+        "quantity": 1
+      },
+      {
+        "id": 2,
+        "name": "Whey Protein Concentrado 900g",
+        "price": 129.9,
+        "quantity": 1
+      },
+      {
+        "id": 1,
+        "name": "Creatina Monohidratada 300g",
+        "price": 89.9,
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": 1037,
+    "userId": 2,
+    "createdAt": "2026-08-28T18:02:40.578Z",
+    "total": "R$ 519,40",
+    "items": [
+      {
+        "id": 3,
+        "name": "Ômega 3 60 cápsulas",
+        "price": 49.9,
+        "quantity": 1
+      },
+      {
+        "id": 1,
+        "name": "Creatina Monohidratada 300g",
+        "price": 89.9,
+        "quantity": 2
+      },
+      {
+        "id": 2,
+        "name": "Whey Protein Concentrado 900g",
+        "price": 129.9,
+        "quantity": 1
+      },
+      {
+        "id": 6,
+        "name": "Barra de Proteína Chocolate (12un)",
+        "price": 59.9,
+        "quantity": 1
+      },
+      {
+        "id": 5,
+        "name": "Pré Treino Explosivo 300g",
+        "price": 99.9,
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": 1038,
+    "userId": 2,
+    "createdAt": "2026-08-28T18:16:55.484Z",
+    "total": "R$ 109,80",
+    "items": [
+      {
+        "id": 14,
+        "name": "Colágeno Berry Glow 300g",
+        "price": 74.9,
+        "quantity": 1
+      },
+      {
+        "id": 16,
+        "name": "Cafeína Pulse 60 cápsulas",
+        "price": 34.9,
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": 1039,
+    "userId": 3,
+    "createdAt": "2026-08-29T10:05:16.440Z",
+    "total": "R$ 159,80",
+    "items": [
+      {
+        "id": 6,
+        "name": "Barra de Proteína Chocolate (12un)",
+        "price": 59.9,
+        "quantity": 1
+      },
+      {
+        "id": 5,
+        "name": "Pré Treino Explosivo 300g",
+        "price": 99.9,
+        "quantity": 1
+      }
+    ]
+  }
+]

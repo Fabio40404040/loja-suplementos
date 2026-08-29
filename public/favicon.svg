@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Forja Nutrition</title>
+  <desc id="desc">Letra F geométrica em verde sobre fundo grafite</desc>
+  <defs>
+    <linearGradient id="bg" x1="8" y1="5" x2="55" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#20251e"/>
+      <stop offset="1" stop-color="#0b0e0a"/>
+    </linearGradient>
+    <linearGradient id="lime" x1="19" y1="15" x2="45" y2="50" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d9ff4b"/>
+      <stop offset="1" stop-color="#a9d315"/>
+    </linearGradient>
+  </defs>
+  <rect x="3" y="3" width="58" height="58" rx="15" fill="url(#bg)"/>
+  <path d="M21 15h27l-4 10H31.5l-2 7H41l-3.5 9H27l-3 10H13l8-36Z" fill="url(#lime)"/>
+  <path d="M47 15 37 51h8l8-36h-6Z" fill="#ffffff" opacity=".16"/>
+  <path d="M14 53h30" stroke="#c8f135" stroke-width="2" stroke-linecap="round" opacity=".42"/>
+</svg>

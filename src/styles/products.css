@@ -1,0 +1,24 @@
+.products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.product-card { min-width: 0; display: flex; flex-direction: column; position: relative; overflow: hidden; border: 1px solid #e5e7df; border-radius: 10px; background: #fff; transition: transform .25s, box-shadow .25s; }
+.product-card:hover { transform: translateY(-5px); box-shadow: 0 20px 45px rgba(22,26,20,.1); }
+.product-media { position: relative; aspect-ratio: 1/1; overflow: hidden; background: #f4f2e9; }
+.product-media img { width: 100%; height: 100%; display: block; object-fit: contain; mix-blend-mode: multiply; transition: transform .35s; }
+.product-card:hover .product-media img { transform: scale(1.045); }
+.product-badge { position: absolute; left: 12px; top: 12px; z-index: 1; padding: 6px 9px; border-radius: 4px; background: #10130f; color: #fff; font-size: 8px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.product-badge.sale { background: #c8f135; color: #10130f; }
+.favorite-btn { position: absolute; right: 12px; top: 12px; z-index: 1; width: 34px; height: 34px; display: grid; place-items: center; border: 0; border-radius: 50%; background: rgba(255,255,255,.9); color: #10130f; cursor: pointer; }
+.favorite-btn:hover, .favorite-btn.active { background: #10130f; color: #c8f135; }
+.product-info { flex: 1; display: flex; flex-direction: column; padding: 16px; }
+.product-category { margin: 0 0 7px; color: #858a81; font-size: 9px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+.product-card h3 { min-height: 42px; margin: 0; color: #10130f; font-size: 14px; line-height: 1.45; }
+.product-rating { display: flex; align-items: center; gap: 5px; margin: 10px 0; color: #88a900; font-size: 9px; }
+.product-rating span { color: #858a81; }
+.product-price-row { display: flex; align-items: end; justify-content: space-between; gap: 8px; margin-top: auto; }
+.product-price { display: grid; margin: 0; color: #10130f; font-family: "Arial Black", "Segoe UI", sans-serif; font-size: 20px; font-weight: 700; }
+.product-price small { color: #858a81; font-family: "Segoe UI", Arial, sans-serif; font-size: 8px; font-weight: 500; }
+.add-to-cart-btn { width: 42px; height: 42px; display: grid; place-items: center; flex: 0 0 auto; border: 0; border-radius: 6px; background: #10130f; color: #fff; cursor: pointer; transition: background .2s, color .2s, transform .2s; }
+.add-to-cart-btn:hover { background: #c8f135; color: #10130f; transform: scale(1.05); }
+.add-to-cart-btn.added { background: #c8f135; color: #10130f; }
+@media (max-width: 1000px) { .products-grid { grid-template-columns: repeat(3,1fr); } }
+@media (max-width: 720px) { .products-grid { grid-template-columns: repeat(2,1fr); gap: 12px; } }
+@media (max-width: 420px) { .products-grid { grid-template-columns: 1fr; } .product-card h3 { min-height: auto; } }
