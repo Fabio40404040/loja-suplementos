@@ -1,93 +1,61 @@
-
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
-
-import crypto from "crypto";
+import crypto from "node:crypto";
 import bcrypt from "bcrypt";
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
-
-dotenv.config();
+import cors from "cors";
+import express from "express";
+import jwt from "jsonwebtoken";
+import {
+    EXPOSE_RESET_LINK,
+    FRONTEND_URLS,
+    JWT_SECRET,
+    PORT,
+    PRIMARY_FRONTEND_URL
+} from "./config.js";
+import { closeDatabase, initializeDatabase, sql } from "./database.js";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET;
-
-if (!JWT_SECRET) {
-    throw new Error("JWT_SECRET não foi configurado no arquivo backend/.env.");
-}
-
-app.use(cors({
-    origin(origin, callback) {
-        const isLocalDevelopment = !origin || /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
-
-        callback(isLocalDevelopment ? null : new Error("Origem não permitida."), isLocalDevelopment);
-    }
-}));
-app.use(express.json());
-
-const USERS_FILE = new URL("./data/users.json", import.meta.url);
-const USERS_TEMP_FILE = new URL("./data/users.tmp.json", import.meta.url);
-const ORDERS_FILE = new URL("./data/orders.json", import.meta.url);
-const ORDERS_TEMP_FILE = new URL("./data/orders.tmp.json", import.meta.url);
-const defaultUsers = [{
-    id: 1,
-    firstName: "Fábio",
-    email: "fabio7@outlook.com",
-    password:"$2b$10$X6uY83QTsvA1AT3S.Qi6ie4QPMHFS2qqfBPpHUHtJp9tgnVtD7ugG"
-}];
-
-async function saveUsers(usersToSave) {
-    await mkdir(new URL("./data/", import.meta.url), { recursive: true });
-    await writeFile(USERS_TEMP_FILE, JSON.stringify(usersToSave, null, 2));
-    await rename(USERS_TEMP_FILE, USERS_FILE);
-}
-
-async function loadUsers() {
-    try {
-        const fileContent = await readFile(USERS_FILE, "utf8");
-        const savedUsers = JSON.parse(fileContent);
-
-        if (!Array.isArray(savedUsers)) throw new Error("Formato de usuários inválido.");
-        return savedUsers;
-    } catch (error) {
-        if (error.code !== "ENOENT") throw error;
-
-        await saveUsers(defaultUsers);
-        return [...defaultUsers];
-    }
-}
-
-const users = await loadUsers();
-let nextId = users.reduce((largestId, user) => Math.max(largestId, user.id), 0) + 1;
-
 const PREPARATION_TIME_MS = 30 * 1000;
 const SHIPPING_TIME_MS = 60 * 1000;
-const defaultOrders = [
-    { id: 1021, userId: 1, createdAt: "2026-07-28T12:00:00.000Z", total: "R$ 189,90", items: [] },
-    { id: 1035, userId: 1, createdAt: "2026-08-02T12:00:00.000Z", total: "R$ 79,90", items: [] }
-];
 
-async function saveOrders(ordersToSave) {
-    await mkdir(new URL("./data/", import.meta.url), { recursive: true });
-    await writeFile(ORDERS_TEMP_FILE, JSON.stringify(ordersToSave, null, 2));
-    await rename(ORDERS_TEMP_FILE, ORDERS_FILE);
+app.disable("x-powered-by");
+app.use(cors({
+    origin(origin, callback) {
+        const allowed = !origin || FRONTEND_URLS.includes(origin.replace(/\/$/, ""));
+        callback(allowed ? null : new Error("Origem não permitida."), allowed);
+    }
+}));
+app.use(express.json({ limit: "100kb" }));
+
+function publicUser(user) {
+    return {
+        id: Number(user.id),
+        firstName: user.first_name,
+        email: user.email
+    };
 }
 
-async function loadOrders() {
-    try {
-        const fileContent = await readFile(ORDERS_FILE, "utf8");
-        const savedOrders = JSON.parse(fileContent);
+function formatCurrency(cents) {
+    return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    }).format(cents / 100);
+}
 
-        if (!Array.isArray(savedOrders)) throw new Error("Formato de pedidos inválido.");
-        return savedOrders;
-    } catch (error) {
-        if (error.code !== "ENOENT") throw error;
+function normalizedOrder(order) {
+    const createdAt = new Date(order.created_at);
+    const items = Array.isArray(order.items) ? order.items : [];
 
-        await saveOrders(defaultOrders);
-        return [...defaultOrders];
-    }
+    return {
+        id: Number(order.id),
+        userId: Number(order.user_id),
+        createdAt: createdAt.toISOString(),
+        total: formatCurrency(order.total_cents),
+        items: items.map((item) => ({
+            id: Number(item.id),
+            name: item.name,
+            price: item.priceCents / 100,
+            quantity: item.quantity
+        }))
+    };
 }
 
 function orderWithCurrentStatus(order) {
@@ -119,295 +87,285 @@ function orderWithCurrentStatus(order) {
     };
 }
 
-const orders = await loadOrders();
-let nextOrderId = orders.reduce((largestId, order) => Math.max(largestId, order.id), 1000) + 1;
+async function findOrdersForUser(userId, orderId = null) {
+    const rows = orderId === null
+        ? await sql`
+            SELECT
+                orders.id,
+                orders.user_id,
+                orders.total_cents,
+                orders.created_at,
+                COALESCE((
+                    SELECT JSON_AGG(JSON_BUILD_OBJECT(
+                        'id', order_items.product_id,
+                        'name', order_items.name,
+                        'priceCents', order_items.price_cents,
+                        'quantity', order_items.quantity
+                    ) ORDER BY order_items.id)
+                    FROM order_items
+                    WHERE order_items.order_id = orders.id
+                ), '[]'::JSON) AS items
+            FROM orders
+            WHERE orders.user_id = ${userId}
+            ORDER BY orders.created_at DESC
+        `
+        : await sql`
+            SELECT
+                orders.id,
+                orders.user_id,
+                orders.total_cents,
+                orders.created_at,
+                COALESCE((
+                    SELECT JSON_AGG(JSON_BUILD_OBJECT(
+                        'id', order_items.product_id,
+                        'name', order_items.name,
+                        'priceCents', order_items.price_cents,
+                        'quantity', order_items.quantity
+                    ) ORDER BY order_items.id)
+                    FROM order_items
+                    WHERE order_items.order_id = orders.id
+                ), '[]'::JSON) AS items
+            FROM orders
+            WHERE orders.user_id = ${userId} AND orders.id = ${orderId}
+        `;
 
+    return rows.map(normalizedOrder).map(orderWithCurrentStatus);
+}
 
-// ===================== MIDDLEWARE DE AUTENTICAÇÃO =====================
-// Protege rotas que exigem login, checando o token JWT enviado no header
 function authMiddleware(request, response, next) {
+    const [scheme, token] = (request.headers.authorization || "").split(" ");
 
-    const authHeader = request.headers.authorization;
-
-    if (!authHeader) {
-        return response.status(401).json({
-            error: "Entrar na conta para finalizar."
-        });
-    }
-
-    const token = authHeader.split(" ")[1]; // formato: "Bearer TOKEN"
-
-    if (!token) {
-        return response.status(401).json({
-            error: "Token inválido."
-        });
+    if (scheme !== "Bearer" || !token) {
+        return response.status(401).json({ error: "Entrar na conta para finalizar." });
     }
 
     try {
-
         const decoded = jwt.verify(token, JWT_SECRET);
-
         request.userId = decoded.id;
-
-        next();
-
-    } catch (error) {
-
-        return response.status(401).json({
-            error: "Token expirado ou inválido."
-        });
-
+        return next();
+    } catch {
+        return response.status(401).json({ error: "Token expirado ou inválido." });
     }
-
 }
 
-//Rota api/login
-app.post("/api/login", async (request, response) => {
-
-    const email = request.body.email?.trim().toLowerCase();
-    const { password } = request.body;
-
-    if (!email || !password) {
-        return response.status(400).json({
-            error: "E-mail e senha são obrigatórios."
-        });
-    }
-
-    const user = users.find((u) => u.email === email);
-
-    if (!user) {
-        return response.status(401).json({
-            error: "E-mail ou senha inválidos."
-        });
-    }
-
-    const passwordMatches = await bcrypt.compare(password, user.password);
-
-    if (!passwordMatches) {
-        return response.status(401).json({
-            error: "E-mail ou senha inválidos."
-        });
-    }
-
-    const token = jwt.sign(
-        { id: user.id, email: user.email },
-        JWT_SECRET,
-        { expiresIn: "1h" }
-    );
-
-    return response.status(200).json({
-        token,
-        user: {
-            id: user.id,
-            firstName: user.firstName,
-            email: user.email
-        }
-    });
-
+app.get("/api/health", async (_request, response) => {
+    await sql`SELECT 1`;
+    return response.status(200).json({ status: "ok" });
 });
 
-//Rota api/regiter
-app.post("/api/register", async (request, response) => {
-
+app.post("/api/login", async (request, response) => {
     const email = request.body.email?.trim().toLowerCase();
     const { password } = request.body;
 
     if (!email || !password) {
-        return response.status(400).json({
-            error: "E-mail e senha são obrigatórios."
-        });
+        return response.status(400).json({ error: "E-mail e senha são obrigatórios." });
+    }
+
+    const [user] = await sql`
+        SELECT id, first_name, email, password_hash
+        FROM users
+        WHERE email = ${email}
+        LIMIT 1
+    `;
+
+    if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+        return response.status(401).json({ error: "E-mail ou senha inválidos." });
+    }
+
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
+    return response.status(200).json({ token, user: publicUser(user) });
+});
+
+app.post("/api/register", async (request, response) => {
+    const email = request.body.email?.trim().toLowerCase();
+    const { password } = request.body;
+
+    if (!email || !password) {
+        return response.status(400).json({ error: "E-mail e senha são obrigatórios." });
     }
 
     if (password.length < 6) {
-        return response.status(400).json({
-            error: "A senha deve ter pelo menos 6 caracteres."
-        });
+        return response.status(400).json({ error: "A senha deve ter pelo menos 6 caracteres." });
     }
 
-    const existingUser = users.find((u) => u.email === email);
-
-    if (existingUser) {
-        return response.status(409).json({
-            error: "Este e-mail já está cadastrado."
-        });
-    }
-
-    // Gera o hash da senha (nunca salva em texto puro)
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = {
-        id: nextId++,
-        firstName: email.split("@")[0],
-        email,
-        password: hashedPassword
-    };
+    try {
+        const [user] = await sql`
+            INSERT INTO users (first_name, email, password_hash)
+            VALUES (${email.split("@")[0]}, ${email}, ${hashedPassword})
+            RETURNING id, first_name, email
+        `;
 
-    users.push(newUser);
-    await saveUsers(users);
-
-    const token = jwt.sign(
-        { id: newUser.id, email: newUser.email },
-        JWT_SECRET,
-        { expiresIn: "1h" }
-    );
-
-    return response.status(201).json({
-        token,
-        user: {
-            id: newUser.id,
-            firstName: newUser.firstName,
-            email: newUser.email
+        const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
+        return response.status(201).json({ token, user: publicUser(user) });
+    } catch (error) {
+        if (error.code === "23505") {
+            return response.status(409).json({ error: "Este e-mail já está cadastrado." });
         }
-    });
 
+        throw error;
+    }
 });
 
-// ===================== ESQUECI MINHA SENHA (simulado) =====================
 app.post("/api/forgot-password", async (request, response) => {
+    const email = request.body.email?.trim().toLowerCase();
+    const successMessage = "Se o e-mail existir, um link de redefinição foi gerado.";
 
-    const { email } = request.body;
-
-    const user = users.find((u) => u.email === email);
-
-    // Por segurança, sempre respondemos sucesso, mesmo se o e-mail não existir
-    // (evita que alguém descubra quais e-mails estão cadastrados)
-    if (!user) {
-        return response.status(200).json({
-            message: "Se o e-mail existir, um link de redefinição foi gerado."
-        });
+    if (!email) {
+        return response.status(400).json({ error: "Informe seu e-mail." });
     }
 
-    // Gera um token aleatório e define expiração de 15 minutos
+    const [user] = await sql`SELECT id FROM users WHERE email = ${email} LIMIT 1`;
+    if (!user) return response.status(200).json({ message: successMessage });
+
     const resetToken = crypto.randomBytes(32).toString("hex");
-    const resetTokenExpiry = Date.now() + 15 * 60 * 1000;
+    const resetTokenHash = crypto.createHash("sha256").update(resetToken).digest("hex");
+    const resetTokenExpiresAt = new Date(Date.now() + 15 * 60 * 1000);
 
-    user.resetToken = resetToken;
-    user.resetTokenExpiry = resetTokenExpiry;
-    await saveUsers(users);
+    await sql`
+        UPDATE users
+        SET reset_token_hash = ${resetTokenHash}, reset_token_expires_at = ${resetTokenExpiresAt}
+        WHERE id = ${user.id}
+    `;
 
-    // SIMULADO: em produção, aqui enviaríamos um e-mail de verdade.
-    // Por enquanto, devolvemos o link direto na resposta, só para teste.
-    const resetLink = `http://localhost:5173/resetar-senha.html?token=${resetToken}`;
-
-    console.log("Link de redefinição (simulado):", resetLink);
+    const resetLink = `${PRIMARY_FRONTEND_URL}/resetar-senha.html?token=${resetToken}`;
+    console.log("Link de redefinição gerado para envio por e-mail.");
 
     return response.status(200).json({
-        message: "Se o e-mail existir, um link de redefinição foi gerado.",
-        resetLink // presente só na simulação — remover isso quando integrar e-mail real
+        message: successMessage,
+        ...(EXPOSE_RESET_LINK && { resetLink })
     });
-
 });
 
-
-// ===================== REDEFINIR SENHA (simulado) =====================
 app.post("/api/reset-password", async (request, response) => {
-
     const { token, newPassword } = request.body;
 
     if (!token || !newPassword) {
-        return response.status(400).json({
-            error: "Token e nova senha são obrigatórios."
-        });
+        return response.status(400).json({ error: "Token e nova senha são obrigatórios." });
     }
 
-    const user = users.find((u) => u.resetToken === token);
-
-    if (!user) {
-        return response.status(400).json({
-            error: "Token inválido."
-        });
+    if (newPassword.length < 6) {
+        return response.status(400).json({ error: "A senha deve ter pelo menos 6 caracteres." });
     }
 
-    if (Date.now() > user.resetTokenExpiry) {
-        return response.status(400).json({
-            error: "Token expirado. Solicite um novo link."
-        });
+    const resetTokenHash = crypto.createHash("sha256").update(token).digest("hex");
+    const [user] = await sql`
+        SELECT id, reset_token_expires_at
+        FROM users
+        WHERE reset_token_hash = ${resetTokenHash}
+        LIMIT 1
+    `;
+
+    if (!user) return response.status(400).json({ error: "Token inválido." });
+    if (new Date(user.reset_token_expires_at).getTime() < Date.now()) {
+        return response.status(400).json({ error: "Token expirado. Solicite um novo link." });
     }
 
-    // Hasheia a nova senha antes de salvar
-    user.password = await bcrypt.hash(newPassword, 10);
-    user.resetToken = null;
-    user.resetTokenExpiry = null;
-    await saveUsers(users);
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await sql`
+        UPDATE users
+        SET password_hash = ${hashedPassword}, reset_token_hash = NULL, reset_token_expires_at = NULL
+        WHERE id = ${user.id}
+    `;
 
-    return response.status(200).json({
-        message: "Senha redefinida com sucesso!"
-    });
-
+    return response.status(200).json({ message: "Senha redefinida com sucesso!" });
 });
 
-//* ===================== CRIAR PEDIDO (protegida) =====================
-
-app.get("/api/orders", authMiddleware, (request, response) => {
-    const userOrders = orders
-        .filter((order) => order.userId === request.userId)
-        .sort((first, second) => new Date(second.createdAt) - new Date(first.createdAt))
-        .map(orderWithCurrentStatus);
-
-    return response.status(200).json({ orders: userOrders });
+app.get("/api/orders", authMiddleware, async (request, response) => {
+    const orders = await findOrdersForUser(request.userId);
+    return response.status(200).json({ orders });
 });
 
 app.post("/api/orders", authMiddleware, async (request, response) => {
-
     const { items } = request.body;
 
-    // Validação básica
-    if (!items || !Array.isArray(items) || items.length === 0) {
-        return response.status(400).json({
-            error: "O carrinho está vazio."
-        });
+    if (!Array.isArray(items) || items.length === 0) {
+        return response.status(400).json({ error: "O carrinho está vazio." });
     }
 
-    // Calcula o total somando (preço x quantidade) de cada item
-    const totalValue = items.reduce(
-        (sum, item) => sum + (item.price * item.quantity),
+    const normalizedItems = items.map((item) => ({
+        id: Number(item.id),
+        name: String(item.name || "").trim(),
+        priceCents: Math.round(Number(item.price) * 100),
+        quantity: Number(item.quantity)
+    }));
+
+    const invalidItem = normalizedItems.some((item) => (
+        !Number.isInteger(item.id)
+        || !item.name
+        || !Number.isInteger(item.priceCents)
+        || item.priceCents < 0
+        || !Number.isInteger(item.quantity)
+        || item.quantity <= 0
+    ));
+
+    if (invalidItem) {
+        return response.status(400).json({ error: "Há um produto inválido no carrinho." });
+    }
+
+    const totalCents = normalizedItems.reduce(
+        (total, item) => total + item.priceCents * item.quantity,
         0
     );
 
-    const newOrder = {
-        id: nextOrderId++,
-        userId: request.userId,
-        createdAt: new Date().toISOString(),
-        total: `R$ ${totalValue.toFixed(2).replace(".", ",")}`,
-        items: items.map((item) => ({
-            id: item.id,
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity
-        }))
-    };
+    const orderId = await sql.begin(async (transaction) => {
+        const [order] = await transaction`
+            INSERT INTO orders (user_id, total_cents)
+            VALUES (${request.userId}, ${totalCents})
+            RETURNING id
+        `;
 
-    orders.push(newOrder);
-    await saveOrders(orders);
+        for (const item of normalizedItems) {
+            await transaction`
+                INSERT INTO order_items (order_id, product_id, name, price_cents, quantity)
+                VALUES (${order.id}, ${item.id}, ${item.name}, ${item.priceCents}, ${item.quantity})
+            `;
+        }
 
-    return response.status(201).json({
-        order: orderWithCurrentStatus(newOrder)
+        return order.id;
     });
 
+    const [order] = await findOrdersForUser(request.userId, orderId);
+    return response.status(201).json({ order });
 });
 
-// ===================== ROTA DE PERFIL (protegida, opcional) =====================
-app.get("/api/me", authMiddleware, (request, response) => {
+app.get("/api/me", authMiddleware, async (request, response) => {
+    const [user] = await sql`
+        SELECT id, first_name, email
+        FROM users
+        WHERE id = ${request.userId}
+        LIMIT 1
+    `;
 
-    const user = users.find((u) => u.id === request.userId);
+    if (!user) return response.status(404).json({ error: "Usuário não encontrado." });
+    return response.status(200).json({ user: publicUser(user) });
+});
 
-    if (!user) {
-        return response.status(404).json({
-            error: "Usuário não encontrado."
-        });
+app.use((error, _request, response, _next) => {
+    console.error(error);
+
+    if (error.message === "Origem não permitida.") {
+        return response.status(403).json({ error: error.message });
     }
 
-    return response.status(200).json({
-        user: {
-            id: user.id,
-            firstName: user.firstName,
-            email: user.email
-        }
+    return response.status(500).json({ error: "Erro interno do servidor." });
+});
+
+await initializeDatabase();
+
+const server = app.listen(PORT, "0.0.0.0", () => {
+    console.log(`API disponível na porta ${PORT}`);
+});
+
+async function shutdown() {
+    server.close(async () => {
+        await closeDatabase();
+        process.exit(0);
     });
+}
 
-});
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);
 
-
-app.listen(PORT, () => {
-    console.log(`API disponível em http://localhost:${PORT}`);
-});
+export default app;
