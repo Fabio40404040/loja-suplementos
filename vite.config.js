@@ -15,6 +15,7 @@ export default defineConfig({
         conta: resolve(import.meta.dirname, 'minha-conta.html'),
         pedidos: resolve(import.meta.dirname, 'meus-pedidos.html'),
         carrinho: resolve(import.meta.dirname, 'carrinho.html'),
+        pagamento: resolve(import.meta.dirname, 'pagamento.html'),
         esqueciSenha: resolve(import.meta.dirname, 'esqueci-senha.html'),
         resetarSenha: resolve(import.meta.dirname, 'resetar-senha.html'),
         termos: resolve(import.meta.dirname, 'termos.html')

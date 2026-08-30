@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Simulação de pagamento da Forja Nutrition para fins demonstrativos." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Pagamento simulado | Forja Nutrition</title>
+  </head>
+  <body class="payment-page">
+    <header class="payment-header">
+      <div class="shell payment-header-inner">
+        <a class="brand" href="./index.html" aria-label="Forja Nutrition - início">
+          <span class="brand-mark">F</span>
+          <span class="brand-copy"><strong>FORJA</strong><small>NUTRITION</small></span>
+        </a>
+        <a class="payment-back" href="./carrinho.html"><i class="fa-solid fa-arrow-left"></i> Voltar ao carrinho</a>
+      </div>
+    </header>
+
+    <main class="shell payment-main">
+      <div class="demo-payment-notice" role="note">
+        <i class="fa-solid fa-flask"></i>
+        <div><strong>Checkout demonstrativo</strong><span>Nenhuma cobrança será realizada. Não informe dados bancários reais.</span></div>
+      </div>
+
+      <div id="paymentEmpty" class="payment-empty" hidden>
+        <span><i class="fa-solid fa-bag-shopping"></i></span>
+        <h1>Seu carrinho está vazio.</h1>
+        <p>Adicione produtos antes de iniciar a simulação de pagamento.</p>
+        <a href="./index.html#produtos">Explorar produtos</a>
+      </div>
+
+      <div id="paymentLayout" class="payment-layout">
+        <section class="payment-panel" aria-labelledby="paymentTitle">
+          <span class="payment-step">Etapa final</span>
+          <h1 id="paymentTitle">Como deseja simular o pagamento?</h1>
+          <p class="payment-intro">Escolha uma opção fictícia. Somente os produtos do pedido serão enviados ao servidor.</p>
+
+          <form id="paymentForm" class="payment-form" novalidate autocomplete="off">
+          <fieldset class="payment-methods">
+            <legend class="sr-only">Forma de pagamento simulada</legend>
+            <label class="payment-method active">
+              <input type="radio" name="paymentMethod" value="card" checked />
+              <span class="payment-method-icon"><i class="fa-regular fa-credit-card"></i></span>
+              <span><strong>Cartão de teste</strong><small>Aprovação demonstrativa imediata</small></span>
+              <i class="fa-solid fa-circle-check method-check"></i>
+            </label>
+            <label class="payment-method">
+              <input type="radio" name="paymentMethod" value="pix" />
+              <span class="payment-method-icon"><i class="fa-brands fa-pix"></i></span>
+              <span><strong>PIX simulado</strong><small>Sem QR Code ou transferência real</small></span>
+              <i class="fa-solid fa-circle-check method-check"></i>
+            </label>
+          </fieldset>
+
+          <div id="cardSimulation" class="payment-simulation-card">
+            <div class="simulation-details">
+              <span><i class="fa-regular fa-credit-card"></i></span>
+              <div><small>Identificação de teste</small><strong>Cartão fictício final 4242</strong></div>
+              <i class="fa-solid fa-check"></i>
+            </div>
+            <div class="card-data-form">
+              <label class="full-field"><span>Nome no cartão</span><input id="cardHolder" name="cardHolder" type="text" placeholder="Cliente Teste" maxlength="50" autocomplete="off" required /></label>
+              <label class="full-field"><span>Número do cartão fictício</span><input id="cardNumber" name="cardNumber" type="text" inputmode="numeric" placeholder="4242 4242 4242 4242" maxlength="19" autocomplete="off" required /></label>
+              <label><span>Validade fictícia</span><input id="cardExpiry" name="cardExpiry" type="text" inputmode="numeric" placeholder="12/30" maxlength="5" autocomplete="off" required /></label>
+              <label><span>CVV fictício</span><input id="cardCvv" name="cardCvv" type="password" inputmode="numeric" placeholder="123" maxlength="3" autocomplete="off" required /></label>
+            </div>
+            <p class="test-card-tip"><i class="fa-solid fa-flask"></i> Use apenas: 4242 4242 4242 4242 · 12/30 · 123.</p>
+            <p><i class="fa-solid fa-shield-halved"></i> Os campos são apagados após a simulação e nunca são enviados ao servidor.</p>
+          </div>
+
+          <div id="pixSimulation" class="payment-simulation-pix" hidden>
+            <span><i class="fa-brands fa-pix"></i></span>
+            <div><strong>PIX de demonstração</strong><p>Ao continuar, o sistema simulará uma confirmação automática. Não existe chave, QR Code ou transferência.</p></div>
+          </div>
+
+          <p id="paymentMessage" class="payment-message" aria-live="polite"></p>
+          <button id="simulatePaymentBtn" class="simulate-payment-button" type="submit">
+            <span>Finalizar compra simulada</span><i class="fa-solid fa-lock"></i>
+          </button>
+          <small class="payment-privacy"><i class="fa-solid fa-circle-info"></i> Este projeto não coleta dados financeiros.</small>
+          </form>
+        </section>
+
+        <aside class="payment-summary" aria-labelledby="summaryTitle">
+          <div class="payment-summary-heading"><span>Seu pedido</span><h2 id="summaryTitle">Resumo da compra</h2></div>
+          <div id="paymentItems" class="payment-items"></div>
+          <div class="payment-totals">
+            <div><span>Subtotal</span><strong id="paymentSubtotal">R$ 0,00</strong></div>
+            <div><span>Entrega</span><strong class="free-shipping">Grátis</strong></div>
+            <div class="payment-total"><span>Total</span><strong id="paymentTotal">R$ 0,00</strong></div>
+          </div>
+          <div class="payment-security"><i class="fa-solid fa-shield-halved"></i><span><strong>Ambiente de demonstração</strong><small>Pedido fictício para apresentação de portfólio.</small></span></div>
+        </aside>
+      </div>
+
+      <section id="paymentSuccess" class="payment-success" hidden aria-live="polite">
+        <span><i class="fa-solid fa-check"></i></span>
+        <small>Pedido confirmado</small>
+        <h1>Compra finalizada!</h1>
+        <p>Pagamento recebido na simulação. O pedido demonstrativo <strong id="successOrderId"></strong> foi criado com sucesso e nenhum valor real foi cobrado.</p>
+        <div><a href="./meus-pedidos.html">Acompanhar pedido</a><a href="./index.html">Voltar à loja</a></div>
+      </section>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

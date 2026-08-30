@@ -3,8 +3,11 @@
 import { getToken } from "../utils/storage.js";
 
 // Em desenvolvimento, o Vite encaminha /api para o servidor Express.
-// A variável continua disponível para produção, caso a API fique em outro host.
-const API_URL = (import.meta.env.VITE_API_URL || "/api").replace(/\/$/, "");
+// Em produção, aceita a URL do Render com ou sem /api no final.
+const configuredApiUrl = (import.meta.env.VITE_API_URL || "/api").replace(/\/$/, "");
+const API_URL = configuredApiUrl.endsWith("/api")
+    ? configuredApiUrl
+    : `${configuredApiUrl}/api`;
 
 export async function apiRequest(endpoint, options = {}) {
 

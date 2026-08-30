@@ -23,8 +23,20 @@ export function toggleFavorite(productId) {
 
 export function updateFavoritesBadge() {
     const badge = document.querySelector("#favoritesBadge");
-    if (!badge) return;
+    const hamburgerBadge = document.querySelector("#hamburgerFavoritesBadge");
+    if (!badge && !hamburgerBadge) return;
     const total = getFavorites().size;
-    badge.textContent = total;
-    badge.hidden = total === 0;
+
+    if (badge) {
+        badge.textContent = total;
+        badge.hidden = total === 0;
+    }
+
+    if (hamburgerBadge) {
+        const counter = hamburgerBadge.closest(".hamburger-stat");
+        const counters = hamburgerBadge.closest(".hamburger-counts");
+        hamburgerBadge.textContent = total;
+        counter.hidden = total === 0;
+        counters.hidden = !counters.querySelector(".hamburger-stat:not([hidden])");
+    }
 }

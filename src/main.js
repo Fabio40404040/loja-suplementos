@@ -17,7 +17,9 @@ import { resetPasswordForm } from "./components/ResetPassword";
 import { initTracking } from "./components/Tracking";
 import { renderFavoritesPage } from "./components/Favorites";
 import { initHelp } from "./components/Help";
+import { initPayment } from "./components/Payment";
 import "./styles/help.css";
+import "./styles/payment.css";
 
 // search()
 login();
@@ -36,4 +38,4 @@ resetPasswordForm();
 initTracking();
 renderFavoritesPage();
 initHelp();
-
+initPayment();

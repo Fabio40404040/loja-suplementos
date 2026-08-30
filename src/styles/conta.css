@@ -145,6 +145,11 @@ hr {
 .pedido-header > div { display: grid; gap: 2px; }
 .pedido-header > div small { color: #7b8077; font-size: 9px; text-transform: uppercase; letter-spacing: .12em; }
 .pedido-header > div strong { font-size: 18px; }
+.pedido-header .pedido-statuses { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
+.payment-status { padding: 7px 11px; border-radius: 999px; font-size: 10px; font-weight: 800; }
+.payment-status.approved { background: #e7f7dc; color: #397619; }
+.payment-status.pending { background: #fff0d8; color: #a55a00; }
+.payment-status i { margin-right: 4px; }
 
 .pedido-item .status { padding: 7px 11px; border-radius: 999px; font-size: 10px; }
 .pedido-item .status-0 { background: #fff0d8; color: #a55a00; }
@@ -176,6 +181,7 @@ hr {
   .pedidos-container { padding: 22px 14px; }
   .pedido-item { padding: 16px 12px; }
   .pedido-header { align-items: flex-start !important; }
+  .pedido-header .pedido-statuses { justify-content: flex-start; }
   .pedido-meta { flex-direction: column; }
 }
 

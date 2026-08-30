@@ -2,7 +2,7 @@ export function menu() {
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const navLinks = document.getElementById('navLinks');
   const navOverlay = document.getElementById('navOverlay');
-  const icon = hamburgerBtn?.querySelector('i');
+  const icon = hamburgerBtn?.querySelector('.hamburger-menu-icon');
 
   if (!hamburgerBtn || !navLinks || !navOverlay || !icon) return;
 
@@ -37,7 +37,7 @@ export function menu() {
     link.addEventListener('click', closeMenu);
   });
 
-  const mobileQuery = window.matchMedia('(max-width: 1200px)');
+  const mobileQuery = window.matchMedia('(max-width: 900px)');
 
   mobileQuery.addEventListener('change', (e) => {
     if (!e.matches) closeMenu();

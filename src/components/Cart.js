@@ -1,12 +1,10 @@
-import { createOrder } from "../services/OrderService.js";
-import { products } from "../data/products.js";
+import { isAuthenticated } from "../utils/storage.js";
 import {
     getCart,
     removeFromCart,
     updateQuantity,
     getCartCount,
-    getCartTotal,
-    clearCart
+    getCartTotal
 } from "../utils/cart.js";
 
 
@@ -14,14 +12,24 @@ import {
 export function updateCartBadge() {
 
     const badge = document.querySelector("#cartBadge");
+    const hamburgerBadge = document.querySelector("#hamburgerCartBadge");
 
-    if (!badge) return;
+    if (!badge && !hamburgerBadge) return;
 
     const count = getCartCount();
 
-    badge.textContent = count;
+    if (badge) {
+        badge.textContent = count;
+        badge.hidden = count === 0;
+    }
 
-    badge.style.display = count > 0 ? "inline-grid" : "none";
+    if (hamburgerBadge) {
+        const counter = hamburgerBadge.closest(".hamburger-stat");
+        const counters = hamburgerBadge.closest(".hamburger-counts");
+        hamburgerBadge.textContent = count;
+        counter.hidden = count === 0;
+        counters.hidden = !counters.querySelector(".hamburger-stat:not([hidden])");
+    }
 
 }
 
@@ -117,12 +125,12 @@ export function renderCartPage() {
 
     render();
 
-    // Botão de finalizar compra (fake, sem backend de pedidos ainda)
+    // Encaminha para o checkout demonstrativo.
     const checkoutBtn = document.querySelector("#checkoutBtn");
 
     if (checkoutBtn) {
 
-        checkoutBtn.addEventListener("click", async () => {
+        checkoutBtn.addEventListener("click", () => {
 
             const cart = getCart();
 
@@ -130,33 +138,16 @@ export function renderCartPage() {
 
             const checkoutMessage = document.querySelector("#checkoutMessage");
 
-            checkoutBtn.disabled = true;
-            checkoutBtn.textContent = "Finalizando...";
             checkoutMessage.textContent = "";
             checkoutMessage.className = "checkout-message";
 
-            try {
-
-                const { order } = await createOrder(cart);
-
-                checkoutMessage.innerHTML = `Compra finalizada com sucesso! <a href="./meus-pedidos.html">Acompanhar pedido #${order.id}</a>`;
-                checkoutMessage.classList.add("success");
-
-                clearCart();
-                updateCartBadge();
-                render();
-
-                checkoutBtn.style.display = "none"; // esconde o botão, já que carrinho ficou vazio
-
-            } catch (error) {
-
-                checkoutMessage.textContent = error.message;
+            if (!isAuthenticated()) {
+                checkoutMessage.innerHTML = 'Entre na sua conta para continuar. <a href="./login.html">Fazer login</a>';
                 checkoutMessage.classList.add("error");
-
-                checkoutBtn.disabled = false;
-                checkoutBtn.textContent = "Finalizar Compra";
-
+                return;
             }
+
+            window.location.href = "./pagamento.html";
 
         });
 

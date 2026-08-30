@@ -59,6 +59,10 @@ function normalizedOrder(order) {
         userId: Number(order.user_id),
         createdAt: createdAt.toISOString(),
         total: formatCurrency(order.total_cents),
+        paymentStatus: order.payment_status === "approved"
+            ? "Pagamento recebido"
+            : "Pagamento pendente",
+        paymentApproved: order.payment_status === "approved",
         items: items.map((item) => ({
             id: Number(item.id),
             name: item.name,
@@ -104,6 +108,7 @@ async function findOrdersForUser(userId, orderId = null) {
                 orders.id,
                 orders.user_id,
                 orders.total_cents,
+                orders.payment_status,
                 orders.created_at,
                 COALESCE((
                     SELECT JSON_AGG(JSON_BUILD_OBJECT(
@@ -124,6 +129,7 @@ async function findOrdersForUser(userId, orderId = null) {
                 orders.id,
                 orders.user_id,
                 orders.total_cents,
+                orders.payment_status,
                 orders.created_at,
                 COALESCE((
                     SELECT JSON_AGG(JSON_BUILD_OBJECT(
@@ -319,8 +325,8 @@ app.post("/api/orders", authMiddleware, async (request, response) => {
 
     const orderId = await sql.begin(async (transaction) => {
         const [order] = await transaction`
-            INSERT INTO orders (user_id, total_cents)
-            VALUES (${request.userId}, ${totalCents})
+            INSERT INTO orders (user_id, total_cents, payment_status)
+            VALUES (${request.userId}, ${totalCents}, ${"approved"})
             RETURNING id
         `;
 

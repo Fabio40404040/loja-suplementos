@@ -27,12 +27,20 @@ function itemsTemplate(items = []) {
 
 function orderTemplate(order) {
     const nextLabel = order.statusStep === 0 ? "Próxima etapa em" : "Previsão de entrega em";
+    const paymentStatus = order.paymentStatus || "Pagamento recebido";
+    const paymentClass = order.paymentApproved === false ? "pending" : "approved";
     const timer = order.nextStatusAt
         ? `<span class="status-timer" data-next-status="${order.nextStatusAt}" data-order-step="${order.statusStep}">${nextLabel} <strong>--:--</strong></span>`
         : '<span class="status-timer delivered"><i class="fa-solid fa-circle-check"></i> Pedido concluído</span>';
 
     return `<li class="pedido-item">
-        <div class="pedido-header"><div><small>Pedido</small><strong>#${order.id}</strong></div><span class="status status-${order.statusStep}">${order.status}</span></div>
+        <div class="pedido-header">
+            <div><small>Pedido</small><strong>#${order.id}</strong></div>
+            <div class="pedido-statuses">
+                <span class="payment-status ${paymentClass}"><i class="fa-solid fa-circle-check"></i> ${paymentStatus}</span>
+                <span class="status status-${order.statusStep}">${order.status}</span>
+            </div>
+        </div>
         <div class="pedido-meta"><span><i class="fa-regular fa-calendar"></i> ${order.data}</span><strong>${order.total}</strong></div>
         ${itemsTemplate(order.items)}
         <ol class="order-timeline">${timelineTemplate(order)}</ol>
