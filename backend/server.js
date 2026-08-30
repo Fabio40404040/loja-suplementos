@@ -11,6 +11,7 @@ import {
     PRIMARY_FRONTEND_URL
 } from "./config.js";
 import { closeDatabase, initializeDatabase, sql } from "./database.js";
+import { sendPasswordResetEmail } from "./email.js";
 
 const app = express();
 const PREPARATION_TIME_MS = 30 * 1000;
@@ -232,7 +233,7 @@ app.post("/api/register", async (request, response) => {
 
 app.post("/api/forgot-password", async (request, response) => {
     const email = request.body.email?.trim().toLowerCase();
-    const successMessage = "Se o e-mail existir, um link de redefinição foi gerado.";
+    const successMessage = "Se o e-mail estiver cadastrado, enviaremos um link de redefinição.";
 
     if (!email) {
         return response.status(400).json({ error: "Informe seu e-mail." });
@@ -252,7 +253,17 @@ app.post("/api/forgot-password", async (request, response) => {
     `;
 
     const resetLink = `${PRIMARY_FRONTEND_URL}/resetar-senha.html?token=${resetToken}`;
-    console.log("Link de redefinição gerado para envio por e-mail.");
+
+    try {
+        await sendPasswordResetEmail({ to: email, resetLink });
+    } catch (error) {
+        await sql`
+            UPDATE users
+            SET reset_token_hash = NULL, reset_token_expires_at = NULL
+            WHERE id = ${user.id}
+        `;
+        throw error;
+    }
 
     return response.status(200).json({
         message: successMessage,

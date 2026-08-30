@@ -29,3 +29,5 @@ export const FRONTEND_URLS = (process.env.FRONTEND_URL || "http://localhost:5173
 
 export const PRIMARY_FRONTEND_URL = FRONTEND_URLS[0];
 export const EXPOSE_RESET_LINK = process.env.EXPOSE_RESET_LINK === "true" || NODE_ENV !== "production";
+export const RESEND_API_KEY = process.env.RESEND_API_KEY?.trim() || "";
+export const RESET_EMAIL_FROM = process.env.RESET_EMAIL_FROM?.trim() || "";

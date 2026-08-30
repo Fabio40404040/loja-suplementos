@@ -23,20 +23,6 @@ export function forgotPasswordForm() {
             message.style.color = "green";
             message.textContent = data.message;
 
-            // SIMULADO: mostra o link direto na tela, já que não há envio de e-mail real
-            if (data.resetLink) {
-
-                const linkEl = document.createElement("a");
-                linkEl.href = data.resetLink;
-                linkEl.textContent = "Clique aqui para redefinir sua senha (simulação)";
-                linkEl.style.display = "block";
-                linkEl.style.marginTop = "10px";
-                linkEl.style.textAlign = "center";
-
-                message.after(linkEl);
-
-            }
-
         } catch (error) {
 
             message.style.color = "red";
