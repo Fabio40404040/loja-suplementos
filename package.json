@@ -7,8 +7,9 @@
     "node": "22.x"
   },
   "scripts": {
-    "start": "node scripts/dev.js",
-    "dev": "node scripts/dev.js",
+    "start": "vite --open",
+    "dev": "vite --open",
+    "dev:full": "node scripts/dev.js",
     "dev:frontend": "vite --open",
     "dev:backend": "npm --prefix backend run dev",
     "build": "vite build",
