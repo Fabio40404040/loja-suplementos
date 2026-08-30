@@ -15,11 +15,18 @@ import { closeDatabase, initializeDatabase, sql } from "./database.js";
 const app = express();
 const PREPARATION_TIME_MS = 30 * 1000;
 const SHIPPING_TIME_MS = 60 * 1000;
+const VERCEL_FRONTEND_URLS = new Set([
+    "https://loja-suplementos-alpha.vercel.app",
+    "https://loja-suplementos.vercel.app"
+]);
 
 app.disable("x-powered-by");
 app.use(cors({
     origin(origin, callback) {
-        const allowed = !origin || FRONTEND_URLS.includes(origin.replace(/\/$/, ""));
+        const normalizedOrigin = origin?.replace(/\/$/, "");
+        const allowed = !origin
+            || FRONTEND_URLS.includes(normalizedOrigin)
+            || VERCEL_FRONTEND_URLS.has(normalizedOrigin);
         callback(allowed ? null : new Error("Origem não permitida."), allowed);
     }
 }));
