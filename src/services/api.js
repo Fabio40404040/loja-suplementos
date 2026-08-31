@@ -1,6 +1,6 @@
 
 
-import { getToken } from "../utils/storage.js";
+import { getToken, logout } from "../utils/storage.js";
 
 // Em desenvolvimento, o Vite encaminha /api para o servidor Express.
 // Em produção, aceita a URL do Render com ou sem /api no final.
@@ -35,6 +35,13 @@ export async function apiRequest(endpoint, options = {}) {
     const data = contentType.includes("application/json")
         ? await response.json()
         : {};
+
+    const publicAuthEndpoints = ["/login", "/register", "/forgot-password", "/reset-password"];
+    if (response.status === 401 && token && !publicAuthEndpoints.includes(endpoint)) {
+        logout();
+        data.error = "Sua sessão expirou. Entre novamente para continuar.";
+        data.sessionExpired = true;
+    }
 
     return { response, data };
 

@@ -6,6 +6,20 @@ export function saveToken(token) {
 export function getToken() {
     return localStorage.getItem("token");
 }
+
+function tokenExpired(token) {
+    try {
+        const payload = token.split(".")[1];
+        if (!payload) return true;
+
+        const normalizedPayload = payload.replace(/-/g, "+").replace(/_/g, "/");
+        const paddedPayload = normalizedPayload.padEnd(Math.ceil(normalizedPayload.length / 4) * 4, "=");
+        const { exp } = JSON.parse(atob(paddedPayload));
+        return !Number.isFinite(exp) || exp * 1000 <= Date.now();
+    } catch {
+        return true;
+    }
+}
 // Remove o token
 export function removeToken() {
     localStorage.removeItem("token");
@@ -23,7 +37,15 @@ export function getUser() {
 }
 // Verifica se está autenticado
 export function isAuthenticated() {
-    return !!getToken();
+    const token = getToken();
+    if (!token) return false;
+
+    if (tokenExpired(token)) {
+        logout();
+        return false;
+    }
+
+    return true;
 
 }
 // Logout

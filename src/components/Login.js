@@ -1,5 +1,16 @@
 import { loginUser } from "../services/AuthService.js";
 
+const allowedReturnPages = new Set([
+    "pagamento.html",
+    "meus-pedidos.html",
+    "minha-conta.html",
+    "rastreio.html"
+]);
+
+function pageAfterLogin() {
+    const requestedPage = new URLSearchParams(window.location.search).get("return");
+    return allowedReturnPages.has(requestedPage) ? `./${requestedPage}` : "./index.html";
+}
 
 export function login() {
 
@@ -23,7 +34,7 @@ export function login() {
             message.textContent = "Login realizado com sucesso!";
 
             setTimeout(() => {
-                document.location.href = "./index.html";
+                document.location.href = pageAfterLogin();
             }, 1000);
 
         } catch (error) {

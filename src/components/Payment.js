@@ -1,5 +1,5 @@
 import { createOrder } from "../services/OrderService.js";
-import { isAuthenticated } from "../utils/storage.js";
+import { getToken, isAuthenticated } from "../utils/storage.js";
 import { clearCart, getCart, getCartTotal } from "../utils/cart.js";
 import { updateCartBadge } from "./Cart.js";
 
@@ -90,9 +90,12 @@ export function initPayment() {
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
+        const hadSavedSession = Boolean(getToken());
         if (!isAuthenticated()) {
             message.className = "payment-message error";
-            message.innerHTML = 'Entre na sua conta para concluir a simulação. <a href="./login.html">Fazer login</a>';
+            message.innerHTML = hadSavedSession
+                ? 'Sua sessão expirou. <a href="./login.html?return=pagamento.html">Entrar novamente</a>'
+                : 'Entre na sua conta para concluir a simulação. <a href="./login.html?return=pagamento.html">Fazer login</a>';
             return;
         }
 
@@ -134,7 +137,11 @@ export function initPayment() {
             window.scrollTo({ top: 0, behavior: "smooth" });
         } catch (error) {
             message.className = "payment-message error";
-            message.textContent = error.message;
+            if (error.message.includes("sessão expirou")) {
+                message.innerHTML = 'Sua sessão expirou. <a href="./login.html?return=pagamento.html">Entrar novamente</a>';
+            } else {
+                message.textContent = error.message;
+            }
             submitButton.disabled = false;
             submitButton.innerHTML = `<span>${defaultButtonLabel}</span><i class="fa-solid fa-lock"></i>`;
         }

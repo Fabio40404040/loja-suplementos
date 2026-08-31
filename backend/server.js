@@ -196,7 +196,7 @@ app.post("/api/login", async (request, response) => {
         return response.status(401).json({ error: "E-mail ou senha inválidos." });
     }
 
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "24h" });
     return response.status(200).json({ token, user: publicUser(user) });
 });
 
@@ -220,7 +220,7 @@ app.post("/api/register", async (request, response) => {
             RETURNING id, first_name, email
         `;
 
-        const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "24h" });
         return response.status(201).json({ token, user: publicUser(user) });
     } catch (error) {
         if (error.code === "23505") {
