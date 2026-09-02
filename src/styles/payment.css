@@ -130,18 +130,27 @@
 .payment-simulation-card .test-card-tip { padding: 11px 13px; border-radius: 7px; background: #fff8cd; color: #5b5324; font-weight: 700; }
 
 .payment-simulation-pix {
-  display: grid;
-  grid-template-columns: 58px 1fr;
-  gap: 16px;
-  align-items: center;
   padding: 22px;
   border: 1px dashed #aeb59e;
   border-radius: 10px;
   background: #f7f8f3;
 }
-.payment-simulation-pix > span { width: 58px; height: 58px; display: grid; place-items: center; border-radius: 12px; background: var(--ink); color: var(--lime); font-size: 24px; }
-.payment-simulation-pix strong { font-size: 12px; }
-.payment-simulation-pix p { margin: 5px 0 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+.pix-heading { display: flex; gap: 14px; align-items: center; }
+.pix-heading > span { width: 52px; height: 52px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 12px; background: var(--ink); color: var(--lime); font-size: 22px; }
+.pix-heading strong { font-size: 12px; }
+.pix-heading p { margin: 5px 0 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+.pix-content { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 20px; align-items: center; margin-top: 20px; }
+.pix-qr-card { display: grid; gap: 8px; justify-items: center; padding: 12px; border: 1px solid #dde0d5; border-radius: 10px; background: white; }
+.pix-qr-card canvas { display: block; width: 100%; height: auto; max-width: 220px; image-rendering: pixelated; }
+.pix-qr-card small { color: #66705e; font-size: 8px; text-align: center; }
+.pix-qr-card small i { margin-right: 4px; color: #718800; }
+.pix-copy-area { min-width: 0; }
+.pix-copy-area > label { display: block; margin-bottom: 7px; color: #444a41; font-size: 9px; font-weight: 800; }
+.pix-copy-field { display: flex; gap: 8px; }
+.pix-copy-field input { min-width: 0; width: 100%; height: 43px; padding: 0 11px; border: 1px solid #d9dcd3; border-radius: 7px; background: white; color: #555c51; font-size: 9px; text-overflow: ellipsis; }
+.pix-copy-field button { min-width: 92px; border: 0; border-radius: 7px; background: var(--ink); color: white; font-size: 9px; font-weight: 900; cursor: pointer; }
+.pix-copy-field button:hover { color: var(--lime); }
+.pix-copy-area > p { margin: 9px 0 0; color: var(--muted); font-size: 9px; line-height: 1.45; }
 
 .payment-message { min-height: 20px; margin: 18px 0 4px; color: #607900; font-size: 10px; line-height: 1.5; text-align: center; }
 .payment-message.error { color: #b52c1e; }
@@ -206,6 +215,10 @@
   .payment-method { grid-template-columns: 42px 1fr auto; padding-inline: 11px; }
   .card-data-form { grid-template-columns: 1fr; }
   .card-data-form .full-field { grid-column: auto; }
+  .pix-content { grid-template-columns: 1fr; }
+  .pix-qr-card { width: 100%; max-width: 246px; margin-inline: auto; }
+  .pix-copy-field { flex-direction: column; }
+  .pix-copy-field button { min-height: 42px; }
   .payment-summary-heading { padding: 25px 22px 18px; }
   .payment-items { padding-inline: 20px; }
   .payment-item { grid-template-columns: 45px 1fr; }

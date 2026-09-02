@@ -71,8 +71,24 @@
           </div>
 
           <div id="pixSimulation" class="payment-simulation-pix" hidden>
-            <span><i class="fa-brands fa-pix"></i></span>
-            <div><strong>PIX de demonstração</strong><p>Ao continuar, o sistema simulará uma confirmação automática. Não existe chave, QR Code ou transferência.</p></div>
+            <div class="pix-heading">
+              <span><i class="fa-brands fa-pix"></i></span>
+              <div><strong>Pix de demonstração</strong><p>Escaneie apenas para visualizar a mensagem fictícia. Este QR Code não realiza pagamentos.</p></div>
+            </div>
+            <div class="pix-content">
+              <div class="pix-qr-card">
+                <canvas id="pixQrCode" width="220" height="220" role="img" aria-label="QR Code Pix fictício"></canvas>
+                <small><i class="fa-solid fa-flask"></i> QR Code exclusivamente demonstrativo</small>
+              </div>
+              <div class="pix-copy-area">
+                <label for="pixCopyCode">Pix copia e cola fictício</label>
+                <div class="pix-copy-field">
+                  <input id="pixCopyCode" type="text" readonly aria-describedby="pixCopyFeedback" />
+                  <button id="copyPixCode" type="button"><i class="fa-regular fa-copy"></i> Copiar</button>
+                </div>
+                <p id="pixCopyFeedback" aria-live="polite">O conteúdo copiado não é uma chave Pix válida.</p>
+              </div>
+            </div>
           </div>
 
           <p id="paymentMessage" class="payment-message" aria-live="polite"></p>

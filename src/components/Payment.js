@@ -2,6 +2,7 @@ import { createOrder } from "../services/OrderService.js";
 import { getToken, isAuthenticated } from "../utils/storage.js";
 import { clearCart, getCart, getCartTotal } from "../utils/cart.js";
 import { updateCartBadge } from "./Cart.js";
+import QRCode from "qrcode";
 
 function formatCurrency(value) {
     return new Intl.NumberFormat("pt-BR", {
@@ -34,6 +35,10 @@ export function initPayment() {
     const submitButton = document.querySelector("#simulatePaymentBtn");
     const cardSimulation = document.querySelector("#cardSimulation");
     const pixSimulation = document.querySelector("#pixSimulation");
+    const pixQrCode = document.querySelector("#pixQrCode");
+    const pixCopyCode = document.querySelector("#pixCopyCode");
+    const copyPixCode = document.querySelector("#copyPixCode");
+    const pixCopyFeedback = document.querySelector("#pixCopyFeedback");
 
     if (cart.length === 0) {
         layout.hidden = true;
@@ -54,6 +59,36 @@ export function initPayment() {
     total.textContent = formatCurrency(cartTotal);
     const defaultButtonLabel = `Finalizar compra simulada · ${formatCurrency(cartTotal)}`;
     submitButton.querySelector("span").textContent = defaultButtonLabel;
+
+    const pixPayload = `PIX DE DEMONSTRACAO - FORJA NUTRITION - TOTAL ${formatCurrency(cartTotal)} - SEM VALOR FINANCEIRO`;
+    pixCopyCode.value = pixPayload;
+    let pixQrRendered = false;
+
+    async function renderPixQrCode() {
+        if (pixQrRendered) return;
+
+        try {
+            await QRCode.toCanvas(pixQrCode, pixPayload, {
+                width: 220,
+                margin: 2,
+                errorCorrectionLevel: "M",
+                color: { dark: "#11160f", light: "#ffffff" }
+            });
+            pixQrRendered = true;
+        } catch {
+            pixCopyFeedback.textContent = "Não foi possível gerar o QR Code. Use o código fictício ao lado.";
+        }
+    }
+
+    copyPixCode.addEventListener("click", async () => {
+        try {
+            await navigator.clipboard.writeText(pixPayload);
+            pixCopyFeedback.textContent = "Código fictício copiado! Nenhum pagamento será realizado.";
+        } catch {
+            pixCopyFeedback.textContent = "Não foi possível copiar. Selecione o texto manualmente.";
+            pixCopyCode.select();
+        }
+    });
 
     const cardFields = [...cardSimulation.querySelectorAll("input")];
     const cardNumber = document.querySelector("#cardNumber");
@@ -83,6 +118,7 @@ export function initPayment() {
             cardSimulation.hidden = !cardSelected;
             pixSimulation.hidden = cardSelected;
             cardFields.forEach((field) => { field.disabled = !cardSelected; });
+            if (!cardSelected) renderPixQrCode();
             message.textContent = "";
         });
     });
