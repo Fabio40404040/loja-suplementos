@@ -14,47 +14,6 @@ function pageAfterLogin() {
     return allowedReturnPages.has(requestedPage) ? `./${requestedPage}` : "./index.html";
 }
 
-function credentialManagerAvailable() {
-    return "credentials" in navigator && "PasswordCredential" in window;
-}
-
-async function fillCredentialFromBrowser(emailInput, passwordInput, rememberEmail, mediation = "optional") {
-    if (!credentialManagerAvailable()) return false;
-
-    try {
-        const credential = await navigator.credentials.get({
-            password: true,
-            mediation
-        });
-
-        if (credential?.type !== "password") return false;
-
-        emailInput.value = credential.id;
-        passwordInput.value = credential.password;
-        rememberEmail.checked = true;
-        emailInput.dispatchEvent(new Event("input", { bubbles: true }));
-        return true;
-    } catch {
-        // O preenchimento padrão do navegador continua disponível como alternativa.
-        return false;
-    }
-}
-
-async function offerCredentialStorage(email, password) {
-    if (!credentialManagerAvailable()) return;
-
-    try {
-        const credential = new PasswordCredential({
-            id: email,
-            name: email,
-            password
-        });
-        await navigator.credentials.store(credential);
-    } catch {
-        // O navegador pode recusar ou não oferecer o salvamento; o login segue normalmente.
-    }
-}
-
 export function login() {
 
     const form = document.querySelector("#loginForm");
@@ -64,9 +23,7 @@ export function login() {
     const message = document.querySelector("#message");
     const submitButton = form.querySelector('button[type="submit"]');
     const emailInput = document.querySelector("#email");
-    const passwordInput = document.querySelector("#password");
     const rememberEmail = document.querySelector("#rememberEmail");
-    const fillSavedPassword = document.querySelector("#fillSavedPassword");
     const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY);
 
     if (rememberedEmail && emailInput && rememberEmail) {
@@ -89,7 +46,6 @@ export function login() {
 
             if (rememberEmail?.checked) {
                 localStorage.setItem(REMEMBERED_EMAIL_KEY, email);
-                await offerCredentialStorage(email, password);
             } else {
                 localStorage.removeItem(REMEMBERED_EMAIL_KEY);
             }
@@ -146,22 +102,4 @@ export function login() {
 
     }
 
-    if (emailInput && passwordInput && rememberEmail) {
-        fillCredentialFromBrowser(emailInput, passwordInput, rememberEmail);
-
-        fillSavedPassword?.addEventListener("click", async () => {
-            message.textContent = "";
-            const filled = await fillCredentialFromBrowser(
-                emailInput,
-                passwordInput,
-                rememberEmail,
-                "required"
-            );
-
-            if (!filled) {
-                message.style.color = "#b42318";
-                message.textContent = "Nenhuma senha salva foi encontrada neste navegador.";
-            }
-        });
-    }
 }
