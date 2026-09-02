@@ -18,23 +18,25 @@ function credentialManagerAvailable() {
     return "credentials" in navigator && "PasswordCredential" in window;
 }
 
-async function fillCredentialFromBrowser(emailInput, passwordInput, rememberEmail) {
-    if (!credentialManagerAvailable()) return;
+async function fillCredentialFromBrowser(emailInput, passwordInput, rememberEmail, mediation = "optional") {
+    if (!credentialManagerAvailable()) return false;
 
     try {
         const credential = await navigator.credentials.get({
             password: true,
-            mediation: "optional"
+            mediation
         });
 
-        if (credential?.type !== "password") return;
+        if (credential?.type !== "password") return false;
 
         emailInput.value = credential.id;
         passwordInput.value = credential.password;
         rememberEmail.checked = true;
         emailInput.dispatchEvent(new Event("input", { bubbles: true }));
+        return true;
     } catch {
         // O preenchimento padrão do navegador continua disponível como alternativa.
+        return false;
     }
 }
 
@@ -64,6 +66,7 @@ export function login() {
     const emailInput = document.querySelector("#email");
     const passwordInput = document.querySelector("#password");
     const rememberEmail = document.querySelector("#rememberEmail");
+    const fillSavedPassword = document.querySelector("#fillSavedPassword");
     const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY);
 
     if (rememberedEmail && emailInput && rememberEmail) {
@@ -145,5 +148,20 @@ export function login() {
 
     if (emailInput && passwordInput && rememberEmail) {
         fillCredentialFromBrowser(emailInput, passwordInput, rememberEmail);
+
+        fillSavedPassword?.addEventListener("click", async () => {
+            message.textContent = "";
+            const filled = await fillCredentialFromBrowser(
+                emailInput,
+                passwordInput,
+                rememberEmail,
+                "required"
+            );
+
+            if (!filled) {
+                message.style.color = "#b42318";
+                message.textContent = "Nenhuma senha salva foi encontrada neste navegador.";
+            }
+        });
     }
 }

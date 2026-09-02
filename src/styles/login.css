@@ -175,6 +175,21 @@ label {
   color: #3046a8;
 }
 
+.saved-password-btn {
+  width: auto;
+  margin: -4px 0 4px;
+  padding: 5px 0;
+  background: transparent;
+  color: #3046a8;
+  font-size: 13px;
+  text-align: left;
+}
+
+.saved-password-btn:hover {
+  text-decoration: underline;
+  opacity: 1;
+}
+
 /* Wrapper genérico para inputs com botão dentro (email, etc.) */
 .input-wrapper {
   position: relative;
