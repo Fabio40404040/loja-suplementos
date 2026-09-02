@@ -1,5 +1,7 @@
 import { loginUser } from "../services/AuthService.js";
 
+const REMEMBERED_EMAIL_KEY = "rememberedLoginEmail";
+
 const allowedReturnPages = new Set([
     "pagamento.html",
     "meus-pedidos.html",
@@ -19,6 +21,14 @@ export function login() {
     if (!form) return;
 
     const message = document.querySelector("#message");
+    const emailInput = document.querySelector("#email");
+    const rememberEmail = document.querySelector("#rememberEmail");
+    const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY);
+
+    if (rememberedEmail && emailInput && rememberEmail) {
+        emailInput.value = rememberedEmail;
+        rememberEmail.checked = true;
+    }
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -30,6 +40,13 @@ export function login() {
 
         try {
             await loginUser(email, password);
+
+            if (rememberEmail?.checked) {
+                localStorage.setItem(REMEMBERED_EMAIL_KEY, email);
+            } else {
+                localStorage.removeItem(REMEMBERED_EMAIL_KEY);
+            }
+
             message.style.color = "green";
             message.textContent = "Login realizado com sucesso!";
 
@@ -62,7 +79,6 @@ export function login() {
     }
 
     // Botão X: limpa o campo de email
-    const emailInput = document.querySelector("#email");
     const clearEmailBtn = document.querySelector("#clearEmail");
 
     if (emailInput && clearEmailBtn) {

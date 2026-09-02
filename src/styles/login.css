@@ -132,6 +132,14 @@ label {
   margin: 8px 0;
 }
 
+.remember-note {
+  display: block;
+  margin: -2px 0 8px 26px;
+  color: #62685f;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
 /* Mostrar Senha*/
 .password-wrapper {
   position: relative;

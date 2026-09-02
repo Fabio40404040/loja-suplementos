@@ -12,7 +12,7 @@
 
     <div class="login-container">
 
-        <form id="loginForm">
+        <form id="loginForm" autocomplete="on">
 
             <div class="imgcontainer">
                 <img src="./src/assets/avatar_3.png" alt="Avatar" class="avatar">
@@ -27,6 +27,7 @@
                     id="email"
                     type="email"
                     name="email"
+                    autocomplete="username"
                     placeholder="Digite seu email"
                     required>
 
@@ -46,6 +47,7 @@
                         id="password"
                         type="password"
                         name="password"
+                        autocomplete="current-password"
                         placeholder="Digite sua senha"
                         required>
 
@@ -66,12 +68,15 @@
 
                 <label class="remember">
                     <input
+                        id="rememberEmail"
                         type="checkbox"
                         name="remember"
                         checked>
 
-                    Lembrar
+                    Lembrar meu e-mail
                 </label>
+
+                <small class="remember-note">A senha pode ser preenchida com segurança pelo gerenciador do navegador.</small>
 
             </div>
 
