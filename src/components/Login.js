@@ -21,6 +21,7 @@ export function login() {
     if (!form) return;
 
     const message = document.querySelector("#message");
+    const submitButton = form.querySelector('button[type="submit"]');
     const emailInput = document.querySelector("#email");
     const rememberEmail = document.querySelector("#rememberEmail");
     const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY);
@@ -37,6 +38,8 @@ export function login() {
         const password = form.password.value;
 
         message.textContent = "";
+        submitButton.disabled = true;
+        submitButton.textContent = "Entrando...";
 
         try {
             await loginUser(email, password);
@@ -49,15 +52,14 @@ export function login() {
 
             message.style.color = "green";
             message.textContent = "Login realizado com sucesso!";
-
-            setTimeout(() => {
-                document.location.href = pageAfterLogin();
-            }, 1000);
+            document.location.href = pageAfterLogin();
 
         } catch (error) {
             console.error(error);
             message.style.color = "red";
             message.textContent = error.message;
+            submitButton.disabled = false;
+            submitButton.textContent = "Login";
         }
 
     });
