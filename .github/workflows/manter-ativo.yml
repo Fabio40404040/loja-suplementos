@@ -1,0 +1,24 @@
+# Mantém a loja ativa: chama a API duas vezes por dia.
+# A rota /api/health consulta o banco (SELECT 1), o que conta como uso para o
+# Supabase não pausar o projeto, e também acorda a API no Render.
+# Para rodar na hora: GitHub → aba Actions → "Manter loja ativa" → Run workflow.
+
+name: Manter loja ativa
+
+on:
+  schedule:
+    # Horário em UTC: 11:17 e 23:17 = 08:17 e 20:17 em Fortaleza.
+    - cron: '17 11,23 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Chamar a API (acorda o Render e consulta o Supabase)
+        run: |
+          # O Render grátis pode levar até ~1 minuto para acordar, por isso as novas tentativas.
+          curl --fail --silent --show-error \
+            --max-time 90 --retry 5 --retry-delay 20 --retry-all-errors \
+            https://loja-suplementos-x83m.onrender.com/api/health
